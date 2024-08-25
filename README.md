@@ -1,112 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pong Game</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: black;
-            overflow: hidden;
-        }
-        canvas {
-            border: 1px solid white;
-        }
-    </style>
-</head>
-<body>
-<canvas id="pongCanvas"></canvas>
-<script>
-    const canvas = document.getElementById('pongCanvas');
-    const ctx = canvas.getContext('2d');
+## 🎮 Pong Game
+Um simples jogo Pong feito com HTML, CSS e JavaScript! 🕹️
 
-    canvas.width = 600;
-    canvas.height = 400;
+### 📋 Descrição
+Este é um projeto básico para criar o clássico jogo Pong, onde dois jogadores (ou um jogador contra o computador) tentam marcar pontos ao fazer com que a bola passe pela raquete do oponente. O jogo é jogado diretamente no navegador web.
 
-    // Config
-    let ballSpeed = 2;
-    const ballSpeedIncrease = 0.02; // 1% DE VELOCIDADE INICIAL
-    let ballX = canvas.width / 2;
-    let ballY = canvas.height / 2;
-    let ballDeltaX = ballSpeed;
-    let ballDeltaY = ballSpeed;
-    const paddleWidth = 10;
-    const paddleHeight = 100;
-    let leftPaddleY = canvas.height / 2 - paddleHeight / 2;
-    let rightPaddleY = canvas.height / 2 - paddleHeight / 2;
-    const paddleSpeed = 2;
-    let scorePlayer = 0;
-    let scoreAI = 0;
+### 🚀 Começando
+Siga as instruções abaixo para rodar o jogo em sua máquina local.
 
-    // Controle do paddle 
-    document.addEventListener('mousemove', (event) => {
-        leftPaddleY = event.clientY - paddleHeight / 2 - canvas.getBoundingClientRect().top;
-    });
+### 📦 Pré-requisitos
+Tudo o que você precisa é de um navegador moderno! 🌐
 
-    // Bola voltar a o meio
-    function resetBall() {
-        ballSpeed = 2;
-        ballX = canvas.width / 2;
-        ballY = canvas.height / 2;
-        ballDeltaX = -ballDeltaX;
-        ballDeltaY = ballSpeed;
-    }
+### 📥 Instalação
+Clone este repositório:
+bash
+Copiar código
+git clone https://github.com/seu-usuario/pong-game.git
+Navegue até o diretório do projeto:
+bash
+Copiar código
+cd pong-game
+Abra o arquivo index.html no seu navegador:
+bash
+Copiar código
+open index.html
+## 🎮 Como Jogar
+Controle a raquete do jogador 1 movendo o mouse para cima e para baixo. 🖱️
+O jogador 2 é controlado automaticamente. 🤖
+O objetivo é rebater a bola e fazer com que ela passe pela raquete do adversário para marcar pontos! 🏓
+## 🛠️ Tecnologias Utilizadas
+HTML5: Estrutura do jogo.
+CSS3: Estilização simples para o jogo.
+JavaScript: Lógica do jogo, incluindo movimentação da bola e das raquetes.
 
-    // Loop do pong
-    function gameLoop() {
-        // Movimento da bola
-        ballX += ballDeltaX;
-        ballY += ballDeltaY;
-
-        // IA movimento do paddle
-        rightPaddleY += (ballY - (rightPaddleY + paddleHeight / 2)) * 0.1;
-
-        // Colisão da bola
-        if (ballY <= 0 || ballY >= canvas.height) {
-            ballDeltaY = -ballDeltaY;
-        }
-
-        // Colisão da bola com os paddles
-        if (ballX <= paddleWidth && ballY > leftPaddleY && ballY < leftPaddleY + paddleHeight ||
-            ballX >= canvas.width - paddleWidth && ballY > rightPaddleY && ballY < rightPaddleY + paddleHeight) {
-            ballDeltaX = -ballDeltaX;
-            ballSpeed *= 1 + ballSpeedIncrease; // Increase speed by 1%
-            ballDeltaX = (ballDeltaX < 0 ? -1 : 1) * ballSpeed;
-            ballDeltaY = (ballDeltaY < 0 ? -1 : 1) * ballSpeed;
-        }
-
-        // Pontuação
-        if (ballX < 0) {
-            scoreAI++;
-            resetBall();
-        } else if (ballX > canvas.width) {
-            scorePlayer++;
-            resetBall();
-        }
-
-        // Formato/tamanho dos objetos
-        ctx.fillStyle = 'black';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = 'white';
-        ctx.fillRect(0, leftPaddleY, paddleWidth, paddleHeight);
-        ctx.fillRect(canvas.width - paddleWidth, rightPaddleY, paddleWidth, paddleHeight);
-        ctx.beginPath();
-        ctx.arc(ballX, ballY, 10, 0, Math.PI*2);
-        ctx.fill();
-
-        // Pontuação
-        ctx.font = "20px Arial";
-        ctx.fillText(`Player: ${scorePlayer} | AI: ${scoreAI}`, 10, 20);
-
-        requestAnimationFrame(gameLoop);
-    }
-
-    gameLoop();
-</script>
-</body>
-</html>
